@@ -6,6 +6,14 @@ from app.main import app
 client = TestClient(app)
 
 
+def test_agent_ui_is_available() -> None:
+    response = client.get("/")
+
+    assert response.status_code == 200
+    assert "LangProtect Multi-Agent Lab" in response.text
+    assert 'id="chat-form"' in response.text
+
+
 def test_health_is_public() -> None:
     response = client.get("/health")
 
@@ -55,7 +63,12 @@ def test_architecture_documents_multi_agent_topology() -> None:
     payload = response.json()
     assert len([node for node in payload["nodes"] if node["kind"] == "agent"]) == 3
     relationships = {edge["relationship"] for edge in payload["edges"]}
-    assert {"handoff_to", "uses_agent_as_tool", "uses_tool", "uses_mcp_server"} <= relationships
+    assert {
+        "handoff_to",
+        "uses_agent_as_tool",
+        "uses_tool",
+        "uses_mcp_server",
+    } <= relationships
 
 
 def test_promptfoo_prompt_field_is_supported() -> None:

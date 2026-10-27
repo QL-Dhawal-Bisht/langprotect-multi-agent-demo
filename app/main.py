@@ -1,9 +1,15 @@
 """FastAPI target for LangProtect baseline and graph-driven campaign demonstrations."""
 
+from pathlib import Path
+
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.demo_runtime import architecture, evaluate, session_id
 from app.schemas import ArchitectureResponse, ChatRequest, ChatResponse
+
+STATIC_DIR = Path(__file__).parent / "static"
 
 app = FastAPI(
     title="LangProtect Multi-Agent Demo",
@@ -13,6 +19,12 @@ app = FastAPI(
         "signals and never performs real tool side effects."
     ),
 )
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.get("/", include_in_schema=False, response_class=FileResponse)
+def agent_ui() -> FileResponse:
+    return FileResponse(STATIC_DIR / "index.html")
 
 
 @app.get("/health")

@@ -36,6 +36,8 @@ docker compose ps
 curl http://localhost:8088/health
 ```
 
+Agent UI: `http://localhost:8088/`
+
 API docs: `http://localhost:8088/docs`
 
 Test request (no authentication required):
@@ -93,6 +95,7 @@ uv run pytest
 
 Useful endpoints:
 
+- `GET /` — interactive multi-agent chat UI
 - `GET /health` — public health check
 - `GET /v1/architecture` — documented expected topology; no authentication required
 - `POST /v1/chat` — Promptfoo-compatible target; no authentication required
