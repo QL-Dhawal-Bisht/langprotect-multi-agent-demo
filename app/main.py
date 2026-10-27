@@ -1,9 +1,6 @@
 """FastAPI target for LangProtect baseline and graph-driven campaign demonstrations."""
 
-import hmac
-import os
-
-from fastapi import Depends, FastAPI, Header, HTTPException, status
+from fastapi import FastAPI
 
 from app.demo_runtime import architecture, evaluate, session_id
 from app.schemas import ArchitectureResponse, ChatRequest, ChatResponse
@@ -18,34 +15,17 @@ app = FastAPI(
 )
 
 
-def require_api_key(x_demo_api_key: str | None = Header(default=None)) -> None:
-    expected = os.getenv("DEMO_API_KEY", "demo-only-key")
-    if x_demo_api_key is None or not hmac.compare_digest(x_demo_api_key, expected):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="A valid X-Demo-API-Key header is required.",
-        )
-
-
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok", "mode": "deterministic-safe-demo"}
 
 
-@app.get(
-    "/v1/architecture",
-    response_model=ArchitectureResponse,
-    dependencies=[Depends(require_api_key)],
-)
+@app.get("/v1/architecture", response_model=ArchitectureResponse)
 def get_architecture() -> ArchitectureResponse:
     return architecture()
 
 
-@app.post(
-    "/v1/chat",
-    response_model=ChatResponse,
-    dependencies=[Depends(require_api_key)],
-)
+@app.post("/v1/chat", response_model=ChatResponse)
 def chat(payload: ChatRequest) -> ChatResponse:
     result = evaluate(payload.message or payload.prompt or "")
     return ChatResponse(
