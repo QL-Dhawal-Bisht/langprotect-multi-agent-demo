@@ -5,6 +5,7 @@ const transcript = document.querySelector("#transcript");
 const serviceStatus = document.querySelector("#service-status");
 const sessionLabel = document.querySelector("#session-label");
 const traceAgent = document.querySelector("#trace-agent");
+const traceProvider = document.querySelector("#trace-provider");
 const traceSignal = document.querySelector("#trace-signal");
 const traceEffects = document.querySelector("#trace-effects");
 const traceSession = document.querySelector("#trace-session");
@@ -40,6 +41,7 @@ function appendMessage(role, text, metadata = {}) {
 
 function updateTrace(payload) {
   traceAgent.textContent = payload.routed_agent;
+  traceProvider.textContent = payload.provider;
   traceEffects.textContent = payload.effects_performed ? "Reported" : "None, simulated";
   traceSession.textContent = payload.session_id;
   traceSession.title = payload.session_id;
@@ -124,8 +126,11 @@ for (const button of document.querySelectorAll("[data-prompt]")) {
 fetch("/health")
   .then((response) => {
     if (!response.ok) throw new Error("unhealthy");
+    return response.json();
+  })
+  .then((payload) => {
     serviceStatus.classList.add("online");
-    serviceStatus.lastChild.textContent = " API online";
+    serviceStatus.lastChild.textContent = ` ${payload.provider} online`;
   })
   .catch(() => {
     serviceStatus.classList.add("offline");

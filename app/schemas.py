@@ -1,4 +1,4 @@
-"""API contracts for the deterministic demo target."""
+"""API contracts for the safe demo target."""
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
@@ -32,6 +32,7 @@ class ChatResponse(BaseModel):
     reply: str
     session_id: str
     routed_agent: str
+    provider: str
     candidate_signal: bool
     effects_performed: bool = False
     events: list[SimulatedEvent]

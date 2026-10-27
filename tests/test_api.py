@@ -18,7 +18,11 @@ def test_health_is_public() -> None:
     response = client.get("/health")
 
     assert response.status_code == 200
-    assert response.json() == {"status": "ok", "mode": "deterministic-safe-demo"}
+    assert response.json() == {
+        "status": "ok",
+        "mode": "safe-demo",
+        "provider": "deterministic",
+    }
 
 
 def test_chat_is_public_for_local_demo_testing() -> None:
@@ -26,6 +30,7 @@ def test_chat_is_public_for_local_demo_testing() -> None:
 
     assert response.status_code == 200
     assert response.json()["candidate_signal"] is False
+    assert response.json()["provider"] == "deterministic"
 
 
 def test_safe_message_has_no_candidate_marker() -> None:

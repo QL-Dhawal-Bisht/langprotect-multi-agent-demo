@@ -18,7 +18,7 @@
         <span class="brand-mark" aria-hidden="true">LP</span>
         <span>
           <strong>Multi-Agent Lab</strong>
-          <small>Deterministic test target</small>
+          <small>Provider-backed test target</small>
         </span>
       </a>
       <div class="topbar-actions">
@@ -73,7 +73,7 @@
         </div>
 
         <p class="safety-note">
-          Simulation only. No LLM, tool, database, network, or external side effect is executed.
+          DeepSeek receives chat prompts when configured. It has no tool, database, file, messaging, secret, or external-action access through this demo.
         </p>
       </aside>
 
@@ -106,8 +106,8 @@
               <span><strong>Support Agent</strong><small>Ready</small></span>
             </div>
             <p>
-              Send a normal request or choose a security test. Candidate signals are intentionally
-              deterministic and never represent verified exploitation.
+              Send a normal request or choose a security test. DeepSeek may generate the response text,
+              while candidate classification stays local and never proves exploitation.
             </p>
           </article>
         </div>
@@ -146,6 +146,10 @@
             <dd id="trace-agent">Not started</dd>
           </div>
           <div>
+            <dt>Provider</dt>
+            <dd id="trace-provider">Not started</dd>
+          </div>
+          <div>
             <dt>Security signal</dt>
             <dd><span class="signal neutral" id="trace-signal">None</span></dd>
           </div>
@@ -167,8 +171,7 @@
         </div>
 
         <p class="verification-note" id="verification-note">
-          A marker match is candidate evidence only. LangProtect evidence verification is required
-          before any security impact can be confirmed.
+          Prompts are shared with DeepSeek when enabled. A marker match is candidate evidence only; LangProtect verification is still required before confirming impact.
         </p>
       </aside>
     </main>
