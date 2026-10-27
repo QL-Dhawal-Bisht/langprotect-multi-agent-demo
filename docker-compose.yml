@@ -1,0 +1,20 @@
+name: langprotect-multi-agent-demo
+
+services:
+  multi-agent-demo:
+    build: .
+    container_name: langprotect-multi-agent-demo
+    environment:
+      DEMO_API_KEY: "${DEMO_API_KEY:-demo-only-key}"
+      DEMO_CANDIDATE_MARKER: "${DEMO_CANDIDATE_MARKER:-LANGPROTECT-DEMO-CANDIDATE}"
+    ports:
+      - "${DEMO_PORT:-8088}:8080"
+    networks:
+      - default
+      - langprotect
+    restart: unless-stopped
+
+networks:
+  langprotect:
+    external: true
+    name: langprotect_default
